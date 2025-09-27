@@ -110,12 +110,8 @@
             // Mostra o botão Iniciar e oculta o botão Parar
             startButton.classList.remove('hidden');
             stopButton.classList.add('hidden');
-            // Define o status inicial
-            if (GOOGLE_APPS_SCRIPT_URL.includes("SUA_URL_DEPLOY_APPS_SCRIPT_AQUI")) {
-                updateStatus("⚠️ **Atenção:** Configure a URL do Google Apps Script neste arquivo HTML.", 'warning');
-            } else {
-                updateStatus("Clique em 'Iniciar Scanner' para começar. Use HTTPS!", 'info');
-            }
+            // Define o status inicial (removida a verificação da URL)
+            updateStatus("Clique em 'Iniciar Scanner' para ler o QR code da Nota Fiscal", 'info');
         }
 
         // Função para parar o scanner e o vídeo
@@ -123,7 +119,6 @@
             if (html5QrcodeScanner) {
                 return html5QrcodeScanner.stop().then(() => {
                     console.log("Scanner parado com sucesso.");
-                    // Não chamamos resetUI aqui, pois ele será chamado após o sucesso do envio
                     // Apenas em caso de clique manual no botão 'Parar', ele deve resetar.
                     if (!window._isProcessingScan) { // Se não estiver em processamento de envio
                         resetUI();
@@ -143,8 +138,9 @@
             window._isProcessingScan = true; // Flag para indicar que o processamento está em andamento
             updateStatus("Enviando dados para o Google Sheets...", 'warning');
 
-            if (GOOGLE_APPS_SCRIPT_URL.includes("SUA_URL_DEPLOY_APPS_SCRIPT_AQUI") || !GOOGLE_APPS_SCRIPT_URL) {
-                updateStatus("ERRO: Configure a URL do Google Apps Script no código.", 'error');
+            // Apenas checa se a URL está vazia, o placeholder foi removido
+            if (!GOOGLE_APPS_SCRIPT_URL) {
+                updateStatus("ERRO: A URL do Google Apps Script está vazia.", 'error');
                 console.error("URL do Google Apps Script não configurada.");
                 window._isProcessingScan = false;
                 return;
