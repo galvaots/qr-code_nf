@@ -105,7 +105,7 @@
         async function sendToGoogleSheet(qrCodeMessage) {
             updateStatus("Enviando dados para o Google Sheets...", 'warning');
 
-            // CORREÇÃO: O IF DEVE VERIFICAR O PLACEHOLDER, NÃO A URL FINAL
+            // Esta verificação garante que a URL real foi inserida (a string de placeholder é que deve ser verificada)
             if (GOOGLE_APPS_SCRIPT_URL === "SUA_URL_DEPLOY_APPS_SCRIPT_AQUI" || !GOOGLE_APPS_SCRIPT_URL) {
                 updateStatus("ERRO: Configure a URL do Google Apps Script no código.", 'error');
                 console.error("URL do Google Apps Script não configurada.");
@@ -175,6 +175,9 @@
 
         // Função para inicializar o scanner
         function startScanner() {
+            // Adiciona um log para confirmar que a função foi chamada
+            console.log("-> Botão Clicado: Iniciando startScanner()");
+
             if (html5QrcodeScanner) {
                 html5QrcodeScanner.clear().catch(e => console.error("Erro ao limpar scanner:", e));
             }
@@ -192,19 +195,30 @@
                 ]
             };
             
+            // Tentativa 1: Iniciar com a câmera traseira (environment)
             html5QrcodeScanner.start(
-                { facingMode: "environment" }, // Preferir a câmera traseira
+                { facingMode: "environment" }, 
                 config, 
                 onScanSuccess, 
                 onScanError
             ).then(() => {
                 updateStatus("Scanner ativo. Aponte para o QR code.", 'success');
-                startButton.classList.add('hidden'); // Oculta o botão Iniciar
+                startButton.classList.add('hidden');
             }).catch((err) => {
-                // Aqui é onde falhas de permissão de câmera costumam cair
-                console.error("Falha ao iniciar o scanner:", err);
-                updateStatus("❌ Erro ao iniciar a câmera! Verifique as permissões.", 'error');
-                startButton.classList.remove('hidden'); // Mantém o botão visível
+                console.error("Tentativa 1 (Environment) falhou:", err);
+                
+                // Tentativa 2: Se falhar, tenta iniciar sem especificar a câmera (deixa o navegador escolher)
+                return html5QrcodeScanner.start(
+                    { }, // Sem facingMode explícito
+                    config,
+                    onScanSuccess,
+                    onScanError
+                );
+            }).catch((err) => {
+                // Falha final: Exibe o erro
+                console.error("Falha final ao iniciar a câmera:", err);
+                updateStatus("❌ Erro ao iniciar a câmera! Verifique as permissões. (Motivo: " + (err.name || err) + ")", 'error');
+                startButton.classList.remove('hidden');
             });
         }
         
@@ -213,14 +227,12 @@
 
         // Tenta iniciar automaticamente se for seguro, ou exibe o botão
         window.onload = function() {
-            // Se a URL ainda não foi configurada, avisa.
-            if (GOOGLE_APPS_SCRIPT_URL === "SUA_URL_DEPLOY_APPS_SCRIPT_AQUI") {
+            // Verifica a URL e atualiza o status de carregamento
+            if (GOOGLE_APPS_SCRIPT_URL.includes("SUA_URL_DEPLOY_APPS_SCRIPT_AQUI")) {
                  updateStatus("⚠️ **Atenção:** Configure a URL do Google Apps Script neste arquivo HTML.", 'warning');
+            } else {
+                 updateStatus("Clique em 'Iniciar Scanner' para começar. Use HTTPS (GitHub Pages)!", 'info');
             }
-            
-            // Em ambientes modernos, o acesso à câmera requer interação do usuário (clique),
-            // por isso é mais seguro usar o botão e garantir o start no click.
-            updateStatus("Clique em 'Iniciar Scanner' para começar.", 'info');
             startButton.classList.remove('hidden');
         };
 
