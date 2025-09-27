@@ -46,7 +46,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M5 4a2 2 0 00-2 2v1l1-1 1 1V6a1 1 0 011-1h4a1 1 0 011 1v2l-1-1-1 1V6h-4zM16 4a2 2 0 012 2v1l-1-1-1 1V6a1 1 0 00-1-1h-4a1 1 0 00-1 1v2l1-1 1 1V6h4zM12 14a2 2 0 01-2 2H6a2 2 0 01-2-2v-1l1 1 1-1v1h4a1 1 0 001-1v-2l-1 1-1-1v2zM18 14a2 2 0 00-2-2h-4a2 2 0 00-2 2v2l1-1 1 1v-2h4z" />
                 </svg>
-                Iniciar Scanner
+                Ler Cupom
             </button>
 
              <button id="stop-scan-btn" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-xl transition shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-red-300 hidden">
@@ -111,7 +111,7 @@
             startButton.classList.remove('hidden');
             stopButton.classList.add('hidden');
             // Define o status inicial (removida a verificação da URL)
-            updateStatus("Clique em 'Iniciar Scanner' para ler o QR code da Nota Fiscal", 'info');
+            updateStatus("Clique em 'Ler Cupom' para ler o QR code da Nota Fiscal", 'info');
         }
 
         // Função para parar o scanner e o vídeo
@@ -168,11 +168,11 @@
                 // **PASSO 1: Parar a câmera após o envio bem-sucedido**
                 await stopScanner();
 
-                // **PASSO 2: Voltar para a página inicial (resetar UI) após 3 segundos**
+                // **PASSO 2: Voltar para a página inicial (resetar UI) após 1 segundos**
                 setTimeout(() => {
                     resetUI();
                     window._isProcessingScan = false;
-                }, 3000); // 3 segundos para o usuário ver o feedback de sucesso
+                }, 1000); // 1 segundos para o usuário ver o feedback de sucesso
 
             } catch (error) {
                 console.error("Erro ao enviar dados:", error);
