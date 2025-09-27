@@ -68,15 +68,13 @@
         const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzW6oWKEIFIJh7beHWgtIcrCID15dqC3egYwSMoXy2Jw8MrM0UgKIkjilCNEoAujl_t/exec";
 
         let html5QrcodeScanner;
-        const statusMessage = document.getElementById('status-message');
-        const errorMessage = document.getElementById('error-message');
-        const outputUrlDiv = document.getElementById('output-url');
-        const capturedLinkSpan = document.getElementById('captured-link');
-        const startButton = document.getElementById('start-scan-btn');
-        const readerId = "reader"; // ID do container do scanner
+        // As constantes de elementos DOM são definidas dentro da função initApp para garantir que existam
+        let statusMessage, errorMessage, outputUrlDiv, capturedLinkSpan, startButton, readerId = "reader";
 
         // Função para atualizar o status na tela
         function updateStatus(message, type = 'info') {
+            if (!statusMessage) return; // Proteção caso seja chamada antes de initApp
+
             let bgColor, textColor;
             switch (type) {
                 case 'success':
@@ -124,12 +122,10 @@
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
+                    // No-cors exige que o body seja simples, enviamos como string para ser processado no Apps Script
                     body: JSON.stringify(data)
                 });
 
-                // O Google Apps Script com 'no-cors' não retorna um status útil diretamente,
-                // mas se o fetch não falhar, assumimos sucesso.
-                
                 outputUrlDiv.classList.remove('hidden');
                 capturedLinkSpan.textContent = qrCodeMessage;
                 updateStatus("✅ Sucesso! Link capturado e enviado para a Planilha.", 'success');
@@ -145,7 +141,7 @@
 
         // Handler chamado após o sucesso do scan
         function onScanSuccess(decodedText, decodedResult) {
-            // Parar o scanner após o primeiro QR code ser encontrado
+            // Pausar o scanner evita múltiplos scans do mesmo QR code
             html5QrcodeScanner.pause();
 
             // 1. Mostrar o link capturado
@@ -156,20 +152,19 @@
             
             // 3. Reiniciar o scanner após um pequeno atraso
             setTimeout(() => {
-                html5QrcodeScanner.resume();
-                updateStatus("Pronto para o próximo scan.", 'blue');
+                // Certifique-se de que o scanner existe antes de tentar retomar
+                if (html5QrcodeScanner) {
+                    html5QrcodeScanner.resume();
+                    updateStatus("Pronto para o próximo scan.", 'info');
+                }
             }, 3000); // 3 segundos para o usuário ver o feedback
         }
 
         // Handler de erro do scanner
         function onScanError(errorMessage) {
-            // O scanner falha constantemente antes de encontrar um QR code,
-            // então só exibimos erros de verdade, como falha na câmera.
+            // Erros que ocorrem durante a busca são comuns e devem ser ignorados.
             if (errorMessage.includes("permission denied")) {
                 updateStatus("Acesso à câmera negado. Por favor, permita o uso da câmera.", 'error');
-            } else if (!html5QrcodeScanner.is
-            (readerId)) {
-                // Ignore erros menores que ocorrem durante a busca
             }
         }
 
@@ -182,6 +177,7 @@
                 html5QrcodeScanner.clear().catch(e => console.error("Erro ao limpar scanner:", e));
             }
             
+            // O objeto Html5Qrcode deve ser instanciado a cada nova tentativa de start
             html5QrcodeScanner = new Html5Qrcode(readerId);
 
             // Preferências de configuração
@@ -222,19 +218,35 @@
             });
         }
         
-        // Adiciona o listener para o botão de iniciar
-        startButton.addEventListener('click', startScanner);
+        // Função de inicialização principal
+        function initApp() {
+            // Adquire as referências DOM após a página carregar
+            statusMessage = document.getElementById('status-message');
+            errorMessage = document.getElementById('error-message');
+            outputUrlDiv = document.getElementById('output-url');
+            capturedLinkSpan = document.getElementById('captured-link');
+            startButton = document.getElementById('start-scan-btn');
+            
+            // Adiciona o listener para o botão de iniciar APÓS a certeza de que ele existe
+            if (startButton) {
+                startButton.addEventListener('click', startScanner);
+            } else {
+                console.error("Botão 'start-scan-btn' não encontrado!");
+            }
 
-        // Tenta iniciar automaticamente se for seguro, ou exibe o botão
-        window.onload = function() {
             // Verifica a URL e atualiza o status de carregamento
             if (GOOGLE_APPS_SCRIPT_URL.includes("SUA_URL_DEPLOY_APPS_SCRIPT_AQUI")) {
                  updateStatus("⚠️ **Atenção:** Configure a URL do Google Apps Script neste arquivo HTML.", 'warning');
             } else {
                  updateStatus("Clique em 'Iniciar Scanner' para começar. Use HTTPS (GitHub Pages)!", 'info');
             }
+            
+            // Garante que o botão está visível para que o usuário interaja
             startButton.classList.remove('hidden');
-        };
+        }
+
+        // Inicia a aplicação após todo o conteúdo ter sido carregado
+        window.onload = initApp;
 
     </script>
 </body>
