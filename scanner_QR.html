@@ -1,291 +1,288 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scanner QR Code NF - MVP Galvão</title>
-    <!-- Carrega Tailwind CSS para estilização rápida e responsiva -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Estilização básica para garantir o tamanho do scanner */
-        #reader {
-            width: 100%;
-            max-width: 500px;
-            margin: auto;
-            border-radius: 0.75rem; /* rounded-xl */
-            overflow: hidden;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner QR Code NF - MVP Galvão</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilização básica para garantir o tamanho do scanner */
+        #reader {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 0.75rem; /* rounded-xl */
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+        }
+    </style>
 </head>
 <body class="bg-gray-50 min-h-screen p-4 flex flex-col items-center font-sans">
 
-    <div class="w-full max-w-lg bg-white p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-100">
+    <div class="w-full max-w-lg bg-white p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-100">
 
-        <!-- Header -->
-        <h1 class="text-3xl font-extrabold text-blue-800 text-center mb-2">Scanner QR Code de NF</h1>
-        <p class="text-gray-600 text-center mb-6">Aponte a câmera para o QR code e capture o link para a planilha.</p>
+                <h1 class="text-3xl font-extrabold text-blue-800 text-center mb-2">Scanner QR Code de NF</h1>
+        <p class="text-gray-600 text-center mb-6">Aponte a câmera para o QR code e capture o link para a planilha.</p>
 
-        <!-- Container do Scanner -->
-        <div id="reader" class="mb-6"></div>
+                <div id="reader" class="mb-6"></div>
 
-        <!-- Feedback e Status -->
-        <div id="status-message" class="text-center p-3 rounded-lg font-medium transition-all duration-300 bg-blue-100 text-blue-700">
-            Aguardando início da câmera...
-        </div>
+                <div id="status-message" class="text-center p-3 rounded-lg font-medium transition-all duration-300 bg-blue-100 text-blue-700">
+            Aguardando início da câmera...
+        </div>
 
-        <div class="mt-6 space-y-3">
-            <button id="start-scan-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M5 4a2 2 0 00-2 2v1l1-1 1 1V6a1 1 0 011-1h4a1 1 0 011 1v2l-1-1-1 1V6h-4zM16 4a2 2 0 012 2v1l-1-1-1 1V6a1 1 0 00-1-1h-4a1 1 0 00-1 1v2l1-1 1 1V6h4zM12 14a2 2 0 01-2 2H6a2 2 0 01-2-2v-1l1 1 1-1v1h4a1 1 0 001-1v-2l-1 1-1-1v2zM18 14a2 2 0 00-2-2h-4a2 2 0 00-2 2v2l1-1 1 1v-2h4z" />
-                </svg>
-                Iniciar Scanner
-            </button>
+        <div class="mt-6 space-y-3">
+            <button id="start-scan-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M5 4a2 2 0 00-2 2v1l1-1 1 1V6a1 1 0 011-1h4a1 1 0 011 1v2l-1-1-1 1V6h-4zM16 4a2 2 0 012 2v1l-1-1-1 1V6a1 1 0 00-1-1h-4a1 1 0 00-1 1v2l1-1 1 1V6h4zM12 14a2 2 0 01-2 2H6a2 2 0 01-2-2v-1l1 1 1-1v1h4a1 1 0 001-1v-2l-1 1-1-1v2zM18 14a2 2 0 00-2-2h-4a2 2 0 00-2 2v2l1-1 1 1v-2h4z" />
+                </svg>
+                Iniciar Scanner
+            </button>
 
-             <button id="stop-scan-btn" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-xl transition shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-red-300 hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 002 0V8a1 1 0 00-1-1zm5 1a1 1 0 01-1 1h-2a1 1 0 01-1-1V7a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2a1 1 0 01-1-1V9a1 1 0 011-1h2a1 1 0 011 1z" clip-rule="evenodd" />
-                </svg>
-                Parar Scanner
-            </button>
+             <button id="stop-scan-btn" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-xl transition shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-red-300 hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 002 0V8a1 1 0 00-1-1zm5 1a1 1 0 01-1 1h-2a1 1 0 01-1-1V7a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2a1 1 0 01-1-1V9a1 1 0 011-1h2a1 1 0 011 1z" clip-rule="evenodd" />
+                </svg>
+                Parar Scanner
+            </button>
 
-            <div id="output-url" class="text-sm p-3 bg-gray-100 rounded-xl break-all hidden">
-                <span class="font-semibold text-gray-700">Último Link Capturado:</span>
-                <span id="captured-link" class="text-gray-900 mt-1 block"></span>
-            </div>
-            <p id="error-message" class="text-sm text-red-600 font-semibold mt-2 text-center hidden"></p>
-        </div>
-    </div>
+            <div id="output-url" class="text-sm p-3 bg-gray-100 rounded-xl break-all hidden">
+                <span class="font-semibold text-gray-700">Último Link Capturado:</span>
+                <span id="captured-link" class="text-gray-900 mt-1 block"></span>
+            </div>
+            <p id="error-message" class="text-sm text-red-600 font-semibold mt-2 text-center hidden"></p>
+        </div>
+    </div>
 
-    <!-- Bibliotecas JS -->
-    <!-- Para EMBUTIR: Você precisaria baixar o conteúdo de 'html5-qrcode.min.js' e colá-lo aqui. -->
-    <!-- É fortemente recomendado MANTER este link CDN para código limpo. -->
-    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
-    <script>
-        // Variável GLOBAL a ser substituída após o deploy do Google Apps Script
-        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzW6oWKEIFIJh7beHWgtIcrCID15dqC3egYwSMoXy2Jw8MrM0UgKIkjilCNEoAujl_t/exec";
+    <script>
+        // Variável GLOBAL a ser substituída após o deploy do Google Apps Script
+        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzW6oWKEIFIJh7beHWgtIcrCID15dqC3egYwSMoXy2Jw8MrM0UgKIkjilCNEoAujl_t/exec";
 
-        let html5QrcodeScanner;
-        // As constantes de elementos DOM são definidas dentro da função initApp para garantir que existam
-        let statusMessage, errorMessage, outputUrlDiv, capturedLinkSpan, startButton, stopButton, readerId = "reader";
+        let html5QrcodeScanner;
+        // As constantes de elementos DOM são definidas dentro da função initApp para garantir que existam
+        let statusMessage, errorMessage, outputUrlDiv, capturedLinkSpan, startButton, stopButton, readerId = "reader";
 
-        // Função para atualizar o status na tela
-        function updateStatus(message, type = 'info') {
-            if (!statusMessage) return; // Proteção caso seja chamada antes de initApp
+        // Função para atualizar o status na tela
+        function updateStatus(message, type = 'info') {
+            if (!statusMessage) return; // Proteção caso seja chamada antes de initApp
 
-            let bgColor, textColor;
-            switch (type) {
-                case 'success':
-                    bgColor = 'bg-green-100';
-                    textColor = 'text-green-700';
-                    break;
-                case 'error':
-                    bgColor = 'bg-red-100';
-                    textColor = 'text-red-700';
-                    break;
-                case 'warning':
-                    bgColor = 'bg-yellow-100';
-                    textColor = 'text-yellow-700';
-                    break;
-                case 'info':
-                default:
-                    bgColor = 'bg-blue-100';
-                    textColor = 'text-blue-700';
-                    break;
-            }
-            statusMessage.className = `text-center p-3 rounded-lg font-medium transition-all duration-300 ${bgColor} ${textColor}`;
-            statusMessage.innerHTML = message;
-        }
+            let bgColor, textColor;
+            switch (type) {
+                case 'success':
+                    bgColor = 'bg-green-100';
+                    textColor = 'text-green-700';
+                    break;
+                case 'error':
+                    bgColor = 'bg-red-100';
+                    textColor = 'text-red-700';
+                    break;
+                case 'warning':
+                    bgColor = 'bg-yellow-100';
+                    textColor = 'text-yellow-700';
+                    break;
+                case 'info':
+                default:
+                    bgColor = 'bg-blue-100';
+                    textColor = 'text-blue-700';
+                    break;
+            }
+            statusMessage.className = `text-center p-3 rounded-lg font-medium transition-all duration-300 ${bgColor} ${textColor}`;
+            statusMessage.innerHTML = message;
+        }
 
-        // Função para enviar os dados para o Google Sheet
-        async function sendToGoogleSheet(qrCodeMessage) {
-            updateStatus("Enviando dados para o Google Sheets...", 'warning');
+        // Função para resetar a interface para o estado inicial
+        function resetUI() {
+            // Oculta a URL e o erro
+            outputUrlDiv.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            // Mostra o botão Iniciar e oculta o botão Parar
+            startButton.classList.remove('hidden');
+            stopButton.classList.add('hidden');
+            // Define o status inicial
+            if (GOOGLE_APPS_SCRIPT_URL.includes("SUA_URL_DEPLOY_APPS_SCRIPT_AQUI")) {
+                updateStatus("⚠️ **Atenção:** Configure a URL do Google Apps Script neste arquivo HTML.", 'warning');
+            } else {
+                updateStatus("Clique em 'Iniciar Scanner' para começar. Use HTTPS!", 'info');
+            }
+        }
 
-            // Esta verificação garante que a URL real foi inserida (a string de placeholder é que deve ser verificada)
-            if (GOOGLE_APPS_SCRIPT_URL.includes("SUA_URL_DEPLOY_APPS_SCRIPT_AQUI") || !GOOGLE_APPS_SCRIPT_URL) {
-                updateStatus("ERRO: Configure a URL do Google Apps Script no código.", 'error');
-                console.error("URL do Google Apps Script não configurada.");
-                return;
-            }
+        // Função para parar o scanner e o vídeo
+        function stopScanner() {
+            if (html5QrcodeScanner) {
+                return html5QrcodeScanner.stop().then(() => {
+                    console.log("Scanner parado com sucesso.");
+                    // Não chamamos resetUI aqui, pois ele será chamado após o sucesso do envio
+                    // Apenas em caso de clique manual no botão 'Parar', ele deve resetar.
+                    if (!window._isProcessingScan) { // Se não estiver em processamento de envio
+                        resetUI();
+                    }
+                }).catch((err) => {
+                    console.error("Erro ao parar o scanner:", err);
+                    updateStatus("❌ Erro ao parar a câmera. Recarregue a página se necessário.", 'error');
+                    startButton.classList.remove('hidden');
+                    stopButton.classList.add('hidden');
+                });
+            }
+            return Promise.resolve(); // Retorna uma Promise resolvida se não houver scanner
+        }
 
-            try {
-                // Prepara os dados. Para 'no-cors' mode com Google Apps Script,
-                // é mais confiável enviar a URL-encoded string.
-                const params = new URLSearchParams({
-                    timestamp: new Date().toLocaleString("pt-BR"),
-                    link: qrCodeMessage
-                });
+        // Função para enviar os dados para o Google Sheet
+        async function sendToGoogleSheet(qrCodeMessage) {
+            window._isProcessingScan = true; // Flag para indicar que o processamento está em andamento
+            updateStatus("Enviando dados para o Google Sheets...", 'warning');
 
-                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Necessário para o Google Apps Script
-                    headers: {
-                        // O browser define o Content-Type automaticamente para 'application/x-www-form-urlencoded' quando o body é um URLSearchParams
-                    },
-                    body: params
-                });
+            if (GOOGLE_APPS_SCRIPT_URL.includes("SUA_URL_DEPLOY_APPS_SCRIPT_AQUI") || !GOOGLE_APPS_SCRIPT_URL) {
+                updateStatus("ERRO: Configure a URL do Google Apps Script no código.", 'error');
+                console.error("URL do Google Apps Script não configurada.");
+                window._isProcessingScan = false;
+                return;
+            }
 
-                // Como a resposta é 'no-cors', a fetch() sempre parece bem-sucedida,
-                // então consideramos o envio como bem-sucedido a nível de rede.
-                outputUrlDiv.classList.remove('hidden');
-                capturedLinkSpan.textContent = qrCodeMessage;
-                updateStatus("✅ Sucesso! Link capturado e enviado para a Planilha.", 'success');
-                errorMessage.classList.add('hidden');
+            try {
+                const params = new URLSearchParams({
+                    timestamp: new Date().toLocaleString("pt-BR"),
+                    link: qrCodeMessage
+                });
 
-            } catch (error) {
-                console.error("Erro ao enviar dados:", error);
-                errorMessage.textContent = `Erro de conexão: ${error.message}`;
-                errorMessage.classList.remove('hidden');
-                updateStatus("❌ Falha no envio! Verifique a URL do Script e a conexão.", 'error');
-            }
-        }
+                // eslint-disable-next-line no-unused-vars
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: params
+                });
 
-        // Handler chamado após o sucesso do scan
-        function onScanSuccess(decodedText, decodedResult) {
-            // Pausar o scanner evita múltiplos scans do mesmo QR code
-            html5QrcodeScanner.pause();
-            
-            // 1. Mostrar o link capturado
-            updateStatus("Link Capturado! Processando...", 'info');
-            
-            // 2. Enviar para a planilha
-            sendToGoogleSheet(decodedText);
-            
-            // 3. Reiniciar o scanner após um pequeno atraso
-            setTimeout(() => {
-                // Certifique-se de que o scanner existe antes de tentar retomar
-                if (html5QrcodeScanner) {
-                    html5QrcodeScanner.resume();
-                    updateStatus("Pronto para o próximo scan.", 'info');
-                }
-            }, 3000); // 3 segundos para o usuário ver o feedback
-        }
+                // Lógica de Sucesso e Retorno à Página Inicial
+                outputUrlDiv.classList.remove('hidden');
+                capturedLinkSpan.textContent = qrCodeMessage;
+                updateStatus("✅ Sucesso! Link capturado e enviado para a Planilha. Fechando Câmera...", 'success');
+                errorMessage.classList.add('hidden');
 
-        // Handler de erro do scanner
-        function onScanError(errorMessage) {
-            // A biblioteca chama isso constantemente com "No QR code found" - filtramos erros críticos.
-            if (errorMessage.includes("permission denied")) {
-                updateStatus("Acesso à câmera negado. Por favor, permita o uso da câmera.", 'error');
-            }
-        }
+                // **PASSO 1: Parar a câmera após o envio bem-sucedido**
+                await stopScanner();
 
-        // Função para parar o scanner
-        function stopScanner() {
-             if (html5QrcodeScanner) {
-                html5QrcodeScanner.stop().then(() => {
-                    console.log("Scanner parado com sucesso.");
-                    updateStatus("Scanner parado. Clique em 'Iniciar Scanner' para continuar.", 'info');
-                    startButton.classList.remove('hidden');
-                    stopButton.classList.add('hidden');
-                }).catch((err) => {
-                    console.error("Erro ao parar o scanner:", err);
-                    updateStatus("❌ Erro ao parar a câmera. Recarregue a página se necessário.", 'error');
-                    startButton.classList.remove('hidden');
-                    stopButton.classList.add('hidden');
-                });
-            }
-        }
+                // **PASSO 2: Voltar para a página inicial (resetar UI) após 3 segundos**
+                setTimeout(() => {
+                    resetUI();
+                    window._isProcessingScan = false;
+                }, 3000); // 3 segundos para o usuário ver o feedback de sucesso
 
-        // Função para inicializar o scanner
-        function startScanner() {
-            // Verifica se a biblioteca carregou
-            if (typeof Html5Qrcode === 'undefined') {
-                console.error("ERRO CRÍTICO: Html5Qrcode não está definida. A biblioteca JS falhou ao carregar.");
-                updateStatus("❌ Erro de carregamento: A biblioteca do scanner não foi carregada.", 'error');
-                return;
-            }
+            } catch (error) {
+                console.error("Erro ao enviar dados:", error);
+                errorMessage.textContent = `Erro de conexão: ${error.message}`;
+                errorMessage.classList.remove('hidden');
+                updateStatus("❌ Falha no envio! Verifique a URL do Script e a conexão.", 'error');
+                window._isProcessingScan = false;
+            }
+        }
 
-            // Limpa qualquer scanner anterior antes de iniciar um novo
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear().catch(e => console.error("Erro ao limpar scanner:", e));
-            }
-            
-            // O objeto Html5Qrcode deve ser instanciado a cada nova tentativa de start
-            html5QrcodeScanner = new Html5Qrcode(readerId);
+        // Handler chamado após o sucesso do scan
+        function onScanSuccess(decodedText, decodedResult) {
+            // Pausar o scanner imediatamente
+            // Isso é CRÍTICO para evitar que o scanner tente enviar o mesmo código múltiplas vezes
+            html5QrcodeScanner.pause();
+            
+            updateStatus("Link Capturado! Processando...", 'info');
+            
+            // Chamar a função de envio, que agora gerencia o fechamento da câmera e o reset da UI
+            sendToGoogleSheet(decodedText);
+        }
 
-            // Preferências de configuração
-            const config = {
-                fps: 10,
-                qrbox: { width: 250, height: 250 },
-                // Preferir câmera traseira no celular
-                // Se a primeira opção falhar, ele tentará a segunda (ou a padrão do navegador)
-                
-            };
-            
-            html5QrcodeScanner.start(
-                { facingMode: "environment" }, 
-                config, 
-                onScanSuccess, 
-                onScanError
-            ).then(() => {
-                // Sucesso
-                updateStatus("Scanner ativo. Aponte para o QR code.", 'success');
-                startButton.classList.add('hidden');
-                stopButton.classList.remove('hidden');
-            }).catch((err) => {
-                console.error("Falha ao iniciar a câmera com facingMode environment. Tentando sem modo...", err);
-                
-                // Tentativa 2: Tenta iniciar sem especificar a câmera (deixa o navegador escolher)
-                html5QrcodeScanner.start(
-                    { }, // Sem facingMode explícito
-                    config,
-                    onScanSuccess,
-                    onScanError
-                ).then(() => {
-                    updateStatus("Scanner ativo. Aponte para o QR code.", 'success');
-                    startButton.classList.add('hidden');
-                    stopButton.classList.remove('hidden');
-                }).catch((err) => {
-                    // Falha final: Exibe o erro
-                    console.error("Falha final ao iniciar a câmera:", err);
-                    updateStatus("❌ Erro ao iniciar a câmera! Verifique as permissões. (Motivo: " + (err.name || err) + ")", 'error');
-                    startButton.classList.remove('hidden');
-                    stopButton.classList.add('hidden');
-                });
-            });
-        }
-        
-        // Função de inicialização principal
-        function initApp() {
-            // Adquire as referências DOM após a página carregar
-            statusMessage = document.getElementById('status-message');
-            errorMessage = document.getElementById('error-message');
-            outputUrlDiv = document.getElementById('output-url');
-            capturedLinkSpan = document.getElementById('captured-link');
-            startButton = document.getElementById('start-scan-btn');
-            stopButton = document.getElementById('stop-scan-btn');
-            
-            // Adiciona os listeners
-            if (startButton) {
-                startButton.addEventListener('click', startScanner);
-            }
-            if (stopButton) {
-                stopButton.addEventListener('click', stopScanner);
-            }
+        // Handler de erro do scanner
+        function onScanError(errorMessage) {
+            if (errorMessage.includes("permission denied")) {
+                updateStatus("Acesso à câmera negado. Por favor, permita o uso da câmera.", 'error');
+            }
+        }
+        
+        // Função para inicializar o scanner
+        function startScanner() {
+            if (typeof Html5Qrcode === 'undefined') {
+                console.error("ERRO CRÍTICO: Html5Qrcode não está definida. A biblioteca JS falhou ao carregar.");
+                updateStatus("❌ Erro de carregamento: A biblioteca do scanner não foi carregada.", 'error');
+                return;
+            }
 
-            // Verifica a URL e atualiza o status de carregamento
-            if (GOOGLE_APPS_SCRIPT_URL.includes("SUA_URL_DEPLOY_APPS_SCRIPT_AQUI")) {
-                 updateStatus("⚠️ **Atenção:** Configure a URL do Google Apps Script neste arquivo HTML.", 'warning');
-            } else {
-                 updateStatus("Clique em 'Iniciar Scanner' para começar. Use HTTPS (GitHub Pages)!", 'info');
-            }
-        }
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear().catch(e => console.error("Erro ao limpar scanner:", e));
+            }
+            
+            html5QrcodeScanner = new Html5Qrcode(readerId);
 
-        // Inicia a aplicação após todo o conteúdo ter sido carregado
-        window.onload = initApp;
+            const config = {
+                fps: 10,
+                qrbox: { width: 250, height: 250 },
+            };
+            
+            html5QrcodeScanner.start(
+                { facingMode: "environment" }, 
+                config, 
+                onScanSuccess, 
+                onScanError
+            ).then(() => {
+                // Sucesso
+                updateStatus("Scanner ativo. Aponte para o QR code.", 'success');
+                startButton.classList.add('hidden');
+                stopButton.classList.remove('hidden');
+            }).catch((err) => {
+                console.error("Falha ao iniciar a câmera com facingMode environment. Tentando sem modo...", err);
+                
+                // Tentativa 2: Tenta iniciar sem especificar a câmera
+                html5QrcodeScanner.start(
+                    { }, // Sem facingMode explícito
+                    config,
+                    onScanSuccess,
+                    onScanError
+                ).then(() => {
+                    updateStatus("Scanner ativo. Aponte para o QR code.", 'success');
+                    startButton.classList.add('hidden');
+                    stopButton.classList.remove('hidden');
+                }).catch((err) => {
+                    // Falha final: Exibe o erro
+                    console.error("Falha final ao iniciar a câmera:", err);
+                    updateStatus("❌ Erro ao iniciar a câmera! Verifique as permissões. (Motivo: " + (err.name || err) + ")", 'error');
+                    startButton.classList.remove('hidden');
+                    stopButton.classList.add('hidden');
+                });
+            });
+        }
+        
+        // Função de inicialização principal
+        function initApp() {
+            // Adquire as referências DOM após a página carregar
+            statusMessage = document.getElementById('status-message');
+            errorMessage = document.getElementById('error-message');
+            outputUrlDiv = document.getElementById('output-url');
+            capturedLinkSpan = document.getElementById('captured-link');
+            startButton = document.getElementById('start-scan-btn');
+            stopButton = document.getElementById('stop-scan-btn');
+            
+            // Adiciona os listeners
+            if (startButton) {
+                startButton.addEventListener('click', startScanner);
+            }
+            if (stopButton) {
+                stopButton.addEventListener('click', stopScanner);
+            }
 
-    </script>
+            // Define o estado inicial da interface
+            resetUI();
+        }
+
+        // Inicia a aplicação após todo o conteúdo ter sido carregado
+        window.onload = initApp;
+
+    </script>
 </body>
 </html>
