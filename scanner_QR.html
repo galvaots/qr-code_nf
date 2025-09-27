@@ -105,7 +105,8 @@
         async function sendToGoogleSheet(qrCodeMessage) {
             updateStatus("Enviando dados para o Google Sheets...", 'warning');
 
-            if (GOOGLE_APPS_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbzW6oWKEIFIJh7beHWgtIcrCID15dqC3egYwSMoXy2Jw8MrM0UgKIkjilCNEoAujl_t/exec" || !GOOGLE_APPS_SCRIPT_URL) {
+            // CORREÇÃO: O IF DEVE VERIFICAR O PLACEHOLDER, NÃO A URL FINAL
+            if (GOOGLE_APPS_SCRIPT_URL === "SUA_URL_DEPLOY_APPS_SCRIPT_AQUI" || !GOOGLE_APPS_SCRIPT_URL) {
                 updateStatus("ERRO: Configure a URL do Google Apps Script no código.", 'error');
                 console.error("URL do Google Apps Script não configurada.");
                 return;
@@ -200,6 +201,7 @@
                 updateStatus("Scanner ativo. Aponte para o QR code.", 'success');
                 startButton.classList.add('hidden'); // Oculta o botão Iniciar
             }).catch((err) => {
+                // Aqui é onde falhas de permissão de câmera costumam cair
                 console.error("Falha ao iniciar o scanner:", err);
                 updateStatus("❌ Erro ao iniciar a câmera! Verifique as permissões.", 'error');
                 startButton.classList.remove('hidden'); // Mantém o botão visível
